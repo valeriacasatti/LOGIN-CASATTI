@@ -12,7 +12,6 @@ nav {
   display: flex;
   justify-content: space-around;
   margin-bottom: 1rem;
-  font-size: larger;
   padding-block: 1.5rem;
   border-bottom: 1px solid black;
   position: fixed;

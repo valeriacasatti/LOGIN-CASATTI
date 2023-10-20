@@ -8,24 +8,33 @@ import { productsRouter } from "./routes/products.routes.js";
 import { cartsRouter } from "./routes/carts.routes.js";
 import { cartsService, chatsService, productsService } from "./dao/index.js";
 import { chatsRouter } from "./routes/chat.routes.js";
+import { sessionRouter } from "./routes/session.routes.js";
 import { connectDB } from "./config/dbConnection.js";
+import cookieParser from "cookie-parser";
+import session from "express-session";
+import MongoStore from "connect-mongo";
 
 const port = 8080;
 const app = express();
 
-app.use(express.static(path.join(__dirname, "/public")));
-
-const httpServer = app.listen(port, () =>
-  console.log(`server running on port ${port}`)
-);
-
-const io = new Server(httpServer);
-
 connectDB();
 
+app.use(express.static(path.join(__dirname, "/public")));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-
+app.use(cookieParser("claveCookies"));
+app.use(
+  session({
+    store: MongoStore.create({
+      ttl: 60,
+      mongoUrl:
+        "mongodb+srv://valeriacasatti:tgadm001@cluster0.0ctypqf.mongodb.net/ecommerceDB?retryWrites=true&w=majority",
+    }),
+    secret: "sessionEcommerce",
+    resave: true,
+    saveUninitialized: true,
+  })
+);
 app.engine(".hbs", engine({ extname: ".hbs" }));
 app.set("view engine", ".hbs");
 app.set("views", path.join(__dirname, "/views"));
@@ -34,6 +43,12 @@ app.use(viewsRouter);
 app.use("/api/products", productsRouter);
 app.use("/api/carts", cartsRouter);
 app.use("/api/chats", chatsRouter);
+app.use("/api/session", sessionRouter);
+
+const httpServer = app.listen(port, () =>
+  console.log(`server running on port ${port}`)
+);
+const io = new Server(httpServer);
 
 //PRODUCTS
 io.on("connection", async (socket) => {

@@ -1,11 +1,12 @@
 import { Router } from "express";
 import { productsService } from "../dao/index.js";
 import { cartsService } from "../dao/index.js";
+import { usersService } from "../dao/index.js";
 
 const router = Router();
 
 //home
-router.get("/", async (req, res) => {
+router.get("/home", async (req, res) => {
   try {
     const { limit = 3, page = 1, sort = { price: 1 } } = req.query;
     const query = {};
@@ -43,6 +44,7 @@ router.get("/", async (req, res) => {
         : null,
       style: "home.css",
     };
+
     res.render("home", data);
   } catch (error) {
     res.render({ error: error.message });
@@ -74,4 +76,24 @@ router.get("/cart", async (req, res) => {
   }
 });
 
+//sign up
+router.get("/signUp", (req, res) => {
+  res.render("signUp", { style: "signUp.css" });
+});
+
+//login
+router.get("/", (req, res) => {
+  res.render("logIn", { style: "logIn.css" });
+});
+
+//profile
+router.get("/profile", (req, res) => {
+  if (req.session.email) {
+    const email = req.session.email;
+    res.render("profile", { email, style: "profile.css" });
+  } else {
+    res.redirect("/");
+    //agregar sweet alert
+  }
+});
 export { router as viewsRouter };
