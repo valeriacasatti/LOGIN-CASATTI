@@ -7,10 +7,12 @@ h1 {
 
 h5 {
   color: mediumseagreen;
+  text-align: center;
 }
 
 h6 {
   color: tomato;
+  text-align: center;
 }
 
 .form {

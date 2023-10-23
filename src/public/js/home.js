@@ -1,9 +1,3 @@
-Swal.fire({
-  title: `Bienvenidx ! 😊`,
-  showConfirmButton: false,
-  timer: 1000,
-});
-
 const addToCart = async (pid) => {
   try {
     const cid = "65259c66629d0fc68ead263e";

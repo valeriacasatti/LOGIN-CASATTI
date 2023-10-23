@@ -1,5 +1,7 @@
 <h1>home</h1>
-<p>hi {{userName}}</p>
+{{#if userName}}
+  <p>hi {{userName}}</p>
+{{/if}}
 <div class="page">
   {{#each payload}}
     <div class="div">
